@@ -62,49 +62,70 @@ class MyApp extends StatelessWidget {
     //     // ),
     //   ),
     // );
+    // return MaterialApp(
+    //   home: Scaffold(
+    //     appBar: AppBar(),
+    //     // body: Row(
+    //     //   // 비율로 나눌 경우 Flexible로 감싸서 사용 아래는 3:7로 나눈것
+    //     //   // children: [
+    //     //   //   Flexible(child: Container(color: Colors.blue,), flex: 3),
+    //     //   //   Flexible(child: Container(color: Colors.green), flex: 7),
+    //     //   // ],
+    //     //   // Expanded는 flex: 1과 같음. 즉 박스하나를 꽉채울때 사용
+    //     //   // children: [
+    //     //   //   Expanded(child: Container(color: Colors.blue)),
+    //     //   //   Container(width: 100, color: Colors.green)
+    //     //   // ],
+    //     // ),
+    //     body: Container(
+    //       height: 150,
+    //       padding: EdgeInsets.all(10),
+    //       child: Row(
+    //         children: [
+    //           Image.asset('dog.jpeg', width: 150),
+    //           Expanded(
+    //             child: Column(
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               children: [
+    //                 Text('카메라 팝니다.', style: TextStyle()),
+    //                 Text('금호동 3가'),
+    //                 Text('7000원'),
+    //                 Row(
+    //                   // 우측 정렬
+    //                   mainAxisAlignment: MainAxisAlignment.end,
+    //                   children: const [
+    //                     Icon(Icons.favorite),
+    //                     Text('4')
+    //                   ],
+    //                 )
+    //               ],
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(),
-        // body: Row(
-        //   // 비율로 나눌 경우 Flexible로 감싸서 사용 아래는 3:7로 나눈것
-        //   // children: [
-        //   //   Flexible(child: Container(color: Colors.blue,), flex: 3),
-        //   //   Flexible(child: Container(color: Colors.green), flex: 7),
-        //   // ],
-        //   // Expanded는 flex: 1과 같음. 즉 박스하나를 꽉채울때 사용
-        //   // children: [
-        //   //   Expanded(child: Container(color: Colors.blue)),
-        //   //   Container(width: 100, color: Colors.green)
-        //   // ],
-        // ),
-        body: Container(
-          height: 150,
-          padding: EdgeInsets.all(10),
-          child: Row(
-            children: [
-              Image.asset('dog.jpeg', width: 150),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('카메라 팝니다.', style: TextStyle()),
-                    Text('금호동 3가'),
-                    Text('7000원'),
-                    Row(
-                      // 우측 정렬
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Icon(Icons.favorite),
-                        Text('4')
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
+        body: SizedBox(
+          child: ShopItem(),
         ),
       ),
+    );
+  }
+}
+
+// stless로 생성
+class ShopItem extends StatelessWidget {
+  const ShopItem({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // 추가할 위젯 내용을 하단에 작성
+    return SizedBox(
+      child: Text('안녕'),
     );
   }
 }
