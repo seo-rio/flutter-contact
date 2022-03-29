@@ -19,24 +19,30 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // state 생성은 단순히 stateful 객체 안에 변수를 선언하면 state 취급
+  var total = 3;
   var a = 1;
   var name = ['김영숙', '홍길동', '피자집'];
+
+  addOne() {
+    setState(() {
+      total++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // 버튼 추가
       floatingActionButton: FloatingActionButton(
-        child: Text(a.toString()),
+        child: Text(total.toString()),
         onPressed: (){
           // Dialog는 부모(context)중에 MaterialApp이 있어야 사용 가능
           showDialog(context: context, builder: (context){
-            // step1. DialogUI('작명': 보낼 state);
-            return DialogUI(state: a);
+            return DialogUI(addOne: addOne);
           });
         },
       ),
-      appBar: AppBar(title: Text('연락처 앱')),
+      appBar: AppBar(title: Text(total.toString())),
       body: ListView.builder(
         itemCount: name.length,
         itemBuilder: (context, i) {
@@ -52,25 +58,30 @@ class _MyAppState extends State<MyApp> {
 }
 
 class DialogUI extends StatelessWidget {
-  // step2. this.state 등록
-  const DialogUI({Key? key, this.state}) : super(key: key);
-  // 부모가 보낸 state는 read-only가 좋으므로 관습적으로 final을 사용하여 변수 생성
-  // step3. state 변수 선언
-  final state;
+  DialogUI({Key? key, this.addOne}) : super(key: key);
+  final addOne;
+
+  var inputData = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: SizedBox(
+      child: Container(
+        padding: EdgeInsets.all(20),
         width: 300,
         height: 300,
         child: Column(
           children: [
-            TextField(),
+            // Controller를 사용하면 입력한 데이터가 자동으로 inputData에 저장됨
+            TextField(controller: inputData),
+            // Controller 보다 좀 더 직관적으로 값을 저장할 때 onChanged 사용 (TextField가 좀 많은 경우 사용)
+            // TextField(onChanged: (text){print(text);}),
             TextButton(
               // step4. 부모에게 받은 state 사용
-              child: Text(state.toString()),
-              onPressed: (){},
+              child: Text('완료'),
+              onPressed: (){
+                addOne();
+              },
             ),
             TextButton(
               child: Text('취소'),
