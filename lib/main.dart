@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  // 앱을 구동하라는 의미
-  runApp(MyApp());
-}
-
-// stful 사용하여 state 사용 가능한 class 생성
-class Test extends StatefulWidget {
-  const Test({Key? key}) : super(key: key);
-
-  @override
-  State<Test> createState() => _TestState();
-}
-
-class _TestState extends State<Test> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
+  // Widget에 직접 MaterialApp을 사용하지말고 가장 바깥에 사용
+  runApp(
+      MaterialApp(
+          home: MyApp()
+      )
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -30,25 +19,37 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // state 생성은 단순히 stateful 객체 안에 변수를 선언하면 state 취급
+  var total = 3;
   var a = 1;
   var name = ['김영숙', '홍길동', '피자집'];
+  var like = [0, 0, 0];
+
+  addName(userName) {
+    setState(() {
+      name.add(userName);
+    });
+  }
+
+  addOne() {
+    setState(() {
+      total++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        // 버튼 추가
+    return Scaffold(
+      // 버튼 추가
         floatingActionButton: FloatingActionButton(
-          child: Text(a.toString()),
-          // 버튼을 눌렀을 때 특정 기능을 수행하고 싶으면 onPressed 안에 작성
+          child: Text(total.toString()),
           onPressed: (){
-            // state를 변경하려면 setState 함수를 사용하여 변경
-            setState(() {
-              a++;
+            // Dialog는 부모(context)중에 MaterialApp이 있어야 사용 가능
+            showDialog(context: context, builder: (context){
+              return DialogUI(addOne: addOne, addName: addName);
             });
           },
         ),
-        appBar: AppBar(title: Text('연락처 앱')),
+        appBar: AppBar(title: Text(total.toString())),
         body: ListView.builder(
           itemCount: name.length,
           itemBuilder: (context, i) {
@@ -59,6 +60,46 @@ class _MyAppState extends State<MyApp> {
             );
           },
         )
+    );
+  }
+}
+
+class DialogUI extends StatelessWidget {
+  DialogUI({Key? key, this.addOne, this.addName}) : super(key: key);
+  final addOne;
+  final addName;
+
+  var inputData = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        padding: EdgeInsets.all(20),
+        width: 300,
+        height: 300,
+        child: Column(
+          children: [
+            // Controller를 사용하면 입력한 데이터가 자동으로 inputData에 저장됨
+            TextField(controller: inputData),
+            // Controller 보다 좀 더 직관적으로 값을 저장할 때 onChanged 사용 (TextField가 좀 많은 경우 사용)
+            // TextField(onChanged: (text){print(text);}),
+            TextButton(
+              // step4. 부모에게 받은 state 사용
+              child: Text('완료'),
+              onPressed: (){
+                addOne();
+                addName(inputData.text);
+              },
+            ),
+            TextButton(
+                child: Text('취소'),
+                onPressed: (){
+                  // 현재 페이지 닫기
+                  Navigator.pop(context);
+                }),
+          ],
+        ),
       ),
     );
   }
