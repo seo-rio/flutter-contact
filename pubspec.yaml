@@ -29,6 +29,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # 사용자 권한 요청 package
+  permission_handler: ^8.3.0
+  # 연락처 관련 package
+  contacts_service: ^0.6.3
 
 
   # The following adds the Cupertino Icons font to your application.

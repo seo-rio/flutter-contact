@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:contacts_service/contacts_service.dart';
 
 void main() {
   // Widget에 직접 MaterialApp을 사용하지말고 가장 바깥에 사용
@@ -18,10 +20,42 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  getPermission() async {
+    var status = await Permission.contacts.status;
+    if (status.isGranted) {
+      print('허락됨');
+      var contacts = await ContactsService.getContacts();
+      print(contacts);
+
+      setState(() {
+        name = contacts;
+      });
+      // 연락처에 직접 등록하는 코드
+      // var newPerson = Contact();
+      // newPerson.givenName = '민수';
+      // newPerson.familyName = '김';
+      // await ContactsService.addContact(newPerson);
+
+
+    } else if (status.isDenied) {
+      print('거절됨');
+      Permission.contacts.request();
+      // 앱 설정 화면으로 이동해서 직접 켜줘야함 정책상 거절2번하면 더이상 묻는창이 등장하지 않음
+      // openAppSettings();
+    }
+  }
+
+  // App load 될때 최초 실행
+  @override
+  void initState() {
+    super.initState();
+  }
+
   // state 생성은 단순히 stateful 객체 안에 변수를 선언하면 state 취급
   var total = 3;
   var a = 1;
-  var name = ['김영숙', '홍길동', '피자집'];
+  var name = [];
   var like = [0, 0, 0];
 
   addName(userName) {
@@ -49,14 +83,16 @@ class _MyAppState extends State<MyApp> {
             });
           },
         ),
-        appBar: AppBar(title: Text(total.toString())),
+        appBar: AppBar(title: Text(total.toString()), actions: [
+          IconButton(onPressed: (){ getPermission(); }, icon: Icon(Icons.contacts))
+        ],),
         body: ListView.builder(
           itemCount: name.length,
           itemBuilder: (context, i) {
             print(i);
             return ListTile(
-              leading: Image.asset('dog.jpeg'),
-              title: Text(name[i]),
+              leading: Image.asset('assets/dog.jpeg'),
+              title: Text(name[i].givenName),
             );
           },
         )
