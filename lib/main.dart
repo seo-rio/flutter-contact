@@ -53,9 +53,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   // state 생성은 단순히 stateful 객체 안에 변수를 선언하면 state 취급
-  var total = 3;
+  int total = 3;
   var a = 1;
-  var name = [];
+  List<Contact> name = [];
   var like = [0, 0, 0];
 
   addName(userName) {
@@ -92,7 +92,7 @@ class _MyAppState extends State<MyApp> {
             print(i);
             return ListTile(
               leading: Image.asset('assets/dog.jpeg'),
-              title: Text(name[i].givenName),
+              title: Text(name[i].givenName ?? '없음'),
             );
           },
         )
